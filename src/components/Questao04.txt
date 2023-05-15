@@ -1,0 +1,53 @@
+Ao utilizar contextos, podemos passar valores para uma árvore de componentes sem precisar que esses valores sejam passados de um filho para o outro. 
+Além de que com contextos, só precisamos usar no componente que requer, diferente do props drilling, onde tem componentes que apenas servem como um caminho, mas que não utilizam realmente
+
+// sem contexto
+const Pai = () => {
+    const valor = 1
+
+    return (
+        <Filho valor={valor} />
+    )
+}
+
+const Filho = ({valor}) => {
+
+    return (
+        <Neto valor={valor} />
+    )
+}
+
+const Neto = ({valor}) => {
+
+    return (
+        <p>{valor}</p>
+    )
+}
+
+// com contexto
+import { createContext, useContext } from "react"
+
+const MeuContexto = createContext("")
+
+const Pai = () => {
+    const valor = 1
+
+    return (
+        <MeuContexto.Provider value={valor}>
+            <Filho />
+        </MeuContexto.Provider>
+    )
+}
+
+const Filho = () => {
+    return (
+        <Neto/>
+    )
+}
+
+const Neto = () => {
+    const valor = useContext(MeuContexto)
+    return (
+        <p>{valor}</p>
+    )
+}
